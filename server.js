@@ -30,7 +30,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'chatbot1.html'));
+    res.sendFile(path.join(__dirname, 'chatbot2.html'));
 });
 
 app.listen(PORT, () => {
