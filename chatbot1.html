@@ -157,36 +157,30 @@
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text) return;
-    
+
             // 1. 先顯示使用者訊息（會出現在容器最下方）
             addMessage('user', text);
             userInput.value = '';
-    
+
             // 2. 立即顯示 AI 正在思考的佔位訊息（也會出現在容器最下方，也就是使用者訊息的下面）
             const aiMsgId = addMessage('ai', '<span class="loading-dots">正在思考中...</span>');
             
             sendBtn.disabled = true;
             scrollToBottom();
-    
-            try {
-                // 修改：現在是請求自己伺服器的 API，而不是直接去連 n8n
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: text,
-                        sessionId: sessionId
-                    })
-                });
 
+            try {
+                // 3. 呼叫 Webhook
+                const webhookUrl = `https://n8n-service-dnng.onrender.com/webhook/taipei_marathon_AI_TEST?sessionId=${sessionId}&text=${encodeURIComponent(text)}&language=zh-TW&role=user`;
+
+                const response = await fetch(webhookUrl, { method: 'POST' });
                 const data = await response.json();
 
+                // 4. 更新剛才那個 AI 訊息框的內容
                 const aiBubble = document.getElementById(aiMsgId);
                 if (aiBubble) {
                     aiBubble.innerHTML = data.text || "抱歉，目前無法取得回覆。";
                 }
+
             } catch (error) {
                 console.error("Error:", error);
                 const aiBubble = document.getElementById(aiMsgId);
@@ -235,5 +229,3 @@
     </script>
 </body>
 </html>
-
-
