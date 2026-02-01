@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 // ！！！重要：這是隱藏網址的關鍵，我們從環境變數讀取
 // 如果在本地測試，可以直接填入網址，但在 Render 上我們要設定環境變數
-const N8N_WEBHOOK_URL = process.env.N8N__WEBHOOK_URL;
+const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL;
 
 app.use(express.json()); // 解析 JSON 格式的請求內容
 app.use(express.static(__dirname));
